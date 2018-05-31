@@ -10,4 +10,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="infoRegistrar">Todavía no tienes una cuenta en FriendTec?</string>
+    <string name="strRegistrateAqui"><![CDATA[<u>Regístrate Aquí</u>]]></string>
 </resources>
