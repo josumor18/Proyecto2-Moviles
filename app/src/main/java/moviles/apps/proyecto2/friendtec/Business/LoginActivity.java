@@ -51,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREFERENCE_AUTH_TOKEN = "string.token.sesion";
     private static final String PREFERENCE_SESION_ACTIVA = "boolean.sesion.isActiva";
 
-    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    static SecureRandom rnd = new SecureRandom();
-
     private static String carnet = "";
     private static String nombre = "";
     private static String token = "";
@@ -71,9 +68,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //String uuid = UUID.randomUUID().toString();
-
 
         if(getEstadoSesion()){
             String[] userData = getUsuarioSesion();
@@ -121,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             user.setNombre(response.getString("nombre"));
             user.setCarnet(response.getString("carnet"));
             user.setEmail(response.getString("email"));
+            user.setCarrera(response.getString("carrera"));
             user.setUrl_foto(response.getString("foto"));
             user.setUrl_foto_rounded(response.getString("rfoto"));
             user.setAuth_token(response.getString("auth_token"));
@@ -171,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
     public void guardarUsuarioSesion(String correo, String auth_token){
         SharedPreferences preferences = getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
-        preferences.edit().putString(PREFERENCE_CARNET, correo).apply();
+        preferences.edit().putString(PREFERENCE_CARNET, carnet).apply();
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, chckSesionActiva.isChecked()).apply();
     }
@@ -275,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
             API_Access api = API_Access.getInstance();
             if(tipoAutenticacion == 2){
                 //login con sesion ya abierta de antes
-                //isLogged = api.login_token(carnet, auth_token);
+                isLogged = api.login_token(carnet, auth_token);
             }else if(tipoAutenticacion == 1){
                 //login con facebook
                 //isLogged = api.login_facebook(name, carnet, auth_token);

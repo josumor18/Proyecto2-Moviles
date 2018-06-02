@@ -9,6 +9,7 @@ public class Usuario_Singleton {
     private String nombre;
     private String carnet;
     private String email;
+    private String carrera;
     private String url_foto;
     private String url_foto_rounded;
     private Bitmap foto;
@@ -92,5 +93,13 @@ public class Usuario_Singleton {
 
     public void setUrl_foto_rounded(String url_foto_rounded) {
         this.url_foto_rounded = url_foto_rounded;
+    }
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
     }
 }
