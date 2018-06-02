@@ -1,0 +1,42 @@
+	public class ExecuteUploaded extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            
+            Cloudinary cloudinary = new Cloudinary("cloudinary://523642389612375:w_BVcUQ7VFZ8IQj-iE1-zbqv5iU@ddgkzz2gk");
+            try {
+                String path = "Download/img.jpg"; //Aquí sería la ruta donde se haya seleccionado la imagen
+                File file = new File(Environment.getExternalStorageDirectory(), path);
+				///////////////////////////////////////////////////////////
+				// Generar el random para identificador de la foto
+				StringBuilder sb = new StringBuilder(10);
+				for( int i = 0; i < 10; i++ )
+					sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+				String rand = sb.toString();
+				///////////////////////////////////////////////////////////
+				
+                cloudinary.uploader().upload(file.getAbsoluteFile(), ObjectUtils.asMap("public_id", rand));//emptyMap());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
+	
+	// PARA OBTENER LA URL DE UNA IMAGEN:
+	// Rounded:
+	cloudinary.url().transformation(new Transformation()
+	.height(200).radius(180).crop("scale").chain()
+	.angle(0)).imageTag(identificador + ".png");
+	// Normal:
+	cloudinary.url().transformation(new Transformation()
+	.height(200).radius(0).crop("scale").chain()
+	.angle(0)).imageTag(identificador + ".png");

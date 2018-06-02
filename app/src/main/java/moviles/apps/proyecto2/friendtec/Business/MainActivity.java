@@ -1,13 +1,20 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Base64;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,12 +24,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.ByteArrayOutputStream;
 
 import moviles.apps.proyecto2.friendtec.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    ImageView imgUserPhoto;
+    Bitmap bitmap = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,16 +52,39 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
+        bitmap = Usuario_Singleton.getInstance().getFoto_rounded();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher_round);
+        Bitmap toolbar_bitmap = bitmap;
 
+        int toolbar_length = 1;
+        // Calculate ActionBar height
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        {
+            toolbar_length = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        //toolbar_bitmap.setHeight(toolbar_length);
+        //toolbar_bitmap.setWidth(toolbar_length);
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, toolbar_length - 30, toolbar_length - 30, true));
+        toolbar.setNavigationIcon(d);//Usuario_Singleton.getInstance().getFoto());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View hView =  navigationView.getHeaderView(0);
+        ImageView nav_img = (ImageView) hView.findViewById(R.id.imgUserPhoto);
+        nav_img.setImageBitmap(bitmap);
+        nav_img.getLayoutParams().height = 150;
+        nav_img.getLayoutParams().width = 150;
+        TextView nav_name = hView.findViewById(R.id.txtNameHeader);
+        nav_name.setText(Usuario_Singleton.getInstance().getNombre());
+        TextView nav_email = hView.findViewById(R.id.txtEmailHeader);
+        nav_email.setText(Usuario_Singleton.getInstance().getCarnet());
 
 
     }
@@ -91,17 +127,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_inicio) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_perfil) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_amigos) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_mapa) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_requests) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
 
         }
 
