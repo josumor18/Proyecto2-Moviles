@@ -1,5 +1,7 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.graphics.Bitmap;
+
 public class Usuario_Singleton {
     private static final Usuario_Singleton ourInstance = new Usuario_Singleton();
 
@@ -7,7 +9,10 @@ public class Usuario_Singleton {
     private String nombre;
     private String carnet;
     private String email;
-    private String foto;
+    private String url_foto;
+    private String url_foto_rounded;
+    private Bitmap foto;
+    private Bitmap foto_rounded;
     private String auth_token;
 
     public static Usuario_Singleton getInstance() {
@@ -49,19 +54,43 @@ public class Usuario_Singleton {
         this.email = email;
     }
 
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
     public String getAuth_token() {
         return auth_token;
     }
 
     public void setAuth_token(String auth_token) {
         this.auth_token = auth_token;
+    }
+
+    public Bitmap getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Bitmap foto) {
+        this.foto = foto;
+    }
+
+    public Bitmap getFoto_rounded() {
+        return foto_rounded;
+    }
+
+    public void setFoto_rounded(Bitmap foto_thumbnail) {
+        this.foto_rounded= foto_thumbnail;
+    }
+
+    public String getUrl_foto() {
+        return url_foto;
+    }
+
+    public void setUrl_foto(String url_foto) {
+        this.url_foto = url_foto;
+    }
+
+    public String getUrl_foto_rounded() {
+        return url_foto_rounded;
+    }
+
+    public void setUrl_foto_rounded(String url_foto_rounded) {
+        this.url_foto_rounded = url_foto_rounded;
     }
 }

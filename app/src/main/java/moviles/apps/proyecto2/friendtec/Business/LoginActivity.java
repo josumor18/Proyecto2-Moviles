@@ -3,12 +3,16 @@ package moviles.apps.proyecto2.friendtec.Business;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,8 +21,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Uploader;
+import com.cloudinary.utils.ObjectUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import moviles.apps.proyecto2.friendtec.Data.API_Access;
 import moviles.apps.proyecto2.friendtec.R;
@@ -29,6 +50,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREFERENCE_CARNET = "string.carnet.sesion";
     private static final String PREFERENCE_AUTH_TOKEN = "string.token.sesion";
     private static final String PREFERENCE_SESION_ACTIVA = "boolean.sesion.isActiva";
+
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
 
     private static String carnet = "";
     private static String nombre = "";
@@ -47,6 +71,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //String uuid = UUID.randomUUID().toString();
+
 
         if(getEstadoSesion()){
             String[] userData = getUsuarioSesion();
@@ -81,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
         String pass = edtPasswordLogin.getText().toString();
         //Validar si las credenciales son correctas
         ExecuteLogin login = new ExecuteLogin(carnet, pass);
-        //login.execute();
         login.execute();
     }
 
@@ -92,15 +118,37 @@ public class LoginActivity extends AppCompatActivity {
         try {
             response = response.getJSONObject("data");
             user.setId(response.getString("id"));
-            user.setNombre(response.getString("name"));
+            user.setNombre(response.getString("nombre"));
             user.setCarnet(response.getString("carnet"));
             user.setEmail(response.getString("email"));
-            user.setFoto(response.getString("foto"));
-            user.setAuth_token(response.getString("authentication_token"));
+            user.setUrl_foto(response.getString("foto"));
+            user.setUrl_foto_rounded(response.getString("rfoto"));
+            user.setAuth_token(response.getString("auth_token"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        HttpGetBitmap request = new HttpGetBitmap();
+        Bitmap coverImage = null;
+        try {
+            coverImage = request.execute(user.getUrl_foto()).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        user.setFoto(coverImage);
+
+        HttpGetBitmap request_r = new HttpGetBitmap();
+        Bitmap coverImage_r = null;
+        try {
+            coverImage_r = request_r.execute(user.getUrl_foto_rounded()).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        user.setFoto_rounded(coverImage_r);
         //Si son correctas...hacer:
         if(chckSesionActiva.isChecked()){
             guardarUsuarioSesion(user.getEmail(), user.getAuth_token());
@@ -140,8 +188,12 @@ public class LoginActivity extends AppCompatActivity {
         user.setId("");
         user.setNombre("");
         user.setEmail("");
-        user.setFoto("");
+        user.setUrl_foto("");
+        user.setUrl_foto_rounded("");
         user.setAuth_token("");
+        user.setFoto(null);
+        user.setFoto_rounded(
+                null);
 
         //Streaming.pause();
         //Streaming.cleanStreaming();
@@ -257,4 +309,50 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class HttpGetBitmap extends AsyncTask<String, Void, Bitmap> {
+        private static final String REQUEST_METHOD = "GET";
+        private static final int READ_TIMEOUT = 15000;
+        private static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected Bitmap doInBackground(String... strings){
+
+            Bitmap cover;
+
+            String address = strings[0];//Usuario_Singleton.getInstance().getUrl_foto();
+            //String addressr = Usuario_Singleton.getInstance().getUrl_foto_rounded();
+
+            try {
+
+                //Create a URL object holding our url
+                URL myUrl = new URL(address);
+
+                //Create a connection
+                HttpURLConnection connection =(HttpURLConnection)
+                        myUrl.openConnection();
+
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.setDoInput(true);
+                connection.connect();
+
+                //Create a new InputStream
+                InputStream input = connection.getInputStream();
+                cover = BitmapFactory.decodeStream(input);
+
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                cover = null;
+            }
+            return cover;
+        }
+    }
+
 }
