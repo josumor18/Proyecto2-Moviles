@@ -53,6 +53,18 @@ public class API_Access {
         return makePOSTRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getPosts(String idUser, String auth_token){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "posts/get_friend_posts?id=" + idUser + "&auth_token=" + auth_token;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getInfoUser(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "users/get_username_foto?id_user=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
