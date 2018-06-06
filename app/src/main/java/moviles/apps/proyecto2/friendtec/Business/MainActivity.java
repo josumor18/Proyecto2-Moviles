@@ -12,6 +12,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,6 +37,9 @@ import moviles.apps.proyecto2.friendtec.R;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private int[] tabUnselectedIcon = {R.drawable.ic_round_home_24px, R.drawable.ic_round_search_24px, R.drawable.ic_round_email_24px, R.drawable.ic_round_notifications_active_24px};
+    private  int[] tabSelectedIcon = {R.drawable.ic_round_home_24px_sel, R.drawable.ic_round_search_24px_sel, R.drawable.ic_round_email_24px_sel, R.drawable.ic_round_notifications_active_24px_sel};
+    TabLayout tabLayout;
     ImageView imgUserPhoto;
     Bitmap bitmap = null;
     @Override
@@ -43,14 +49,25 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        tabLayout = findViewById(R.id.appbartabs);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        cargarLayout();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onTabSelected(TabLayout.Tab tab) {
+                cambiarIconoSeleccionado(tab.getPosition());
             }
-        });*/
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                cambiarIconoDeseleccionado(tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         bitmap = Usuario_Singleton.getInstance().getFoto_rounded();
 
@@ -144,5 +161,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void cargarLayout(){
+        tabLayout.addTab(tabLayout.newTab().setIcon(tabSelectedIcon[0]));
+        for(int i = 1; i <= 3; i++){
+            tabLayout.addTab(tabLayout.newTab().setIcon(tabUnselectedIcon[i]));
+        }
+    }
+
+    private void cambiarIconoSeleccionado(int position){
+        tabLayout.getTabAt(position).setIcon(tabSelectedIcon[position]);
+    }
+
+    private void cambiarIconoDeseleccionado(int position){
+        tabLayout.getTabAt(position).setIcon(tabUnselectedIcon[position]);
     }
 }
