@@ -42,6 +42,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import moviles.apps.proyecto2.friendtec.Data.API_Access;
+import moviles.apps.proyecto2.friendtec.Data.HttpGetBitmap;
 import moviles.apps.proyecto2.friendtec.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -306,7 +307,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    public class HttpGetBitmap extends AsyncTask<String, Void, Bitmap> {
+   /* public class HttpGetBitmap extends AsyncTask<String, Void, Bitmap> {
         private static final String REQUEST_METHOD = "GET";
         private static final int READ_TIMEOUT = 15000;
         private static final int CONNECTION_TIMEOUT = 15000;
@@ -348,6 +349,6 @@ public class LoginActivity extends AppCompatActivity {
             }
             return cover;
         }
-    }
+    }*/
 
 }

@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Base64;
@@ -37,8 +38,12 @@ import moviles.apps.proyecto2.friendtec.R;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    FragmentTransaction fragmentTransaction;
+
+    private String[] toolbarTitle = {"Inicio", "Buscar", "Mensajes", "Notificaciones"};
     private int[] tabUnselectedIcon = {R.drawable.ic_round_home_24px, R.drawable.ic_round_search_24px, R.drawable.ic_round_email_24px, R.drawable.ic_round_notifications_active_24px};
     private  int[] tabSelectedIcon = {R.drawable.ic_round_home_24px_sel, R.drawable.ic_round_search_24px_sel, R.drawable.ic_round_email_24px_sel, R.drawable.ic_round_notifications_active_24px_sel};
+    Toolbar toolbar;
     TabLayout tabLayout;
     ImageView imgUserPhoto;
     Bitmap bitmap = null;
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         tabLayout = findViewById(R.id.appbartabs);
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                cambiarFragment(tab.getPosition());
                 cambiarIconoSeleccionado(tab.getPosition());
             }
 
@@ -85,8 +91,6 @@ public class MainActivity extends AppCompatActivity
         {
             toolbar_length = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
         }
-        //toolbar_bitmap.setHeight(toolbar_length);
-        //toolbar_bitmap.setWidth(toolbar_length);
         Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, toolbar_length - 30, toolbar_length - 30, true));
         toolbar.setNavigationIcon(d);//Usuario_Singleton.getInstance().getFoto());
 
@@ -103,7 +107,10 @@ public class MainActivity extends AppCompatActivity
         TextView nav_email = hView.findViewById(R.id.txtEmailHeader);
         nav_email.setText(Usuario_Singleton.getInstance().getCarnet());
 
-
+        StartFragment startFragment = new StartFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contenedor, startFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -170,8 +177,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void cambiarFragment(int tab){
+        switch(tab){
+            case 0:
+                StartFragment startFragment = new StartFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.contenedor, startFragment);
+                fragmentTransaction.commit();
+                break;
+        }
+        //fragmentTransaction.commit();
+    }
+
     private void cambiarIconoSeleccionado(int position){
         tabLayout.getTabAt(position).setIcon(tabSelectedIcon[position]);
+        toolbar.setTitle(toolbarTitle[position]);
     }
 
     private void cambiarIconoDeseleccionado(int position){
