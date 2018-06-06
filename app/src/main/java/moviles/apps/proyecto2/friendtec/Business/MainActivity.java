@@ -1,5 +1,6 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     TabLayout tabLayout;
     ImageView imgUserPhoto;
     Bitmap bitmap = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
