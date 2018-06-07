@@ -53,6 +53,19 @@ public class API_Access {
         return makePOSTRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean register(String carne, String carrera, String email, String username, String password){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("carne",carne);
+        Parametros.put("carrera",carrera);
+        Parametros.put("name", username);
+        Parametros.put("email", email);
+        Parametros.put("password", password);
+        Parametros.put("password_confirmation",password);
+        return makePOSTRequest("users/register", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
+
     public boolean getAmigos(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "amigos/get_amigos?id=" + idUser;

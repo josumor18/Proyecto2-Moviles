@@ -165,6 +165,10 @@ public class LoginActivity extends AppCompatActivity {
         //Intent intent = new Intent(getApplicationContext(), RegistrarActivity.class);
         //startActivity(intent);
     }
+    public void clickRegistrate(View view){
+        Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+        startActivity(intent);
+    }
 
     //------------------------------------------------------------------------------------------------------//
     //----------------------------- Obtiene/Guarda las preferencias de sesion ------------------------------//

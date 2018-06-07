@@ -84,6 +84,13 @@
             android:text="Regístrate aquí"
             android:textAlignment="center"
             android:textColor="#0066ff" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="clickRegistrate"
+            android:text="@string/strRegistrateAqui" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
