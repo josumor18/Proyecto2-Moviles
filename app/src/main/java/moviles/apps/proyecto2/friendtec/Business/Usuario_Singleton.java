@@ -126,4 +126,13 @@ public class Usuario_Singleton {
         }
         return false;
     }
+
+    public void eliminarAmigo(int id_user){
+        for(int i = 0; i < listaAmigos.size(); i++){
+            if(listaAmigos.get(i).getId() == id_user){
+                listaAmigos.remove(i);
+                break;
+            }
+        }
+    }
 }

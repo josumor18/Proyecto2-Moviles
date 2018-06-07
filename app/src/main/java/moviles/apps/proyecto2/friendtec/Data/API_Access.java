@@ -90,6 +90,15 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean search_button_action(String idUser, String id_user2, String accion){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", idUser);
+        Parametros.put("id_user2", id_user2);
+        Parametros.put("accion", accion);
+        return makePOSTRequest("users/search_button", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);

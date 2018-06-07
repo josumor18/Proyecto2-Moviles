@@ -8,11 +8,12 @@ public class Usuario {
     private String carrera;
     private String link_foto;
     private String link_rfoto;
+    private int estado_amistad;
 
     public Usuario() {
     }
 
-    public Usuario(int id, String carnet, String nombre, String email, String carrera, String link_foto, String link_rfoto) {
+    public Usuario(int id, String carnet, String nombre, String email, String carrera, String link_foto, String link_rfoto, int estado_amistad) {
         this.id = id;
         this.carnet = carnet;
         this.nombre = nombre;
@@ -20,6 +21,7 @@ public class Usuario {
         this.carrera = carrera;
         this.link_foto = link_foto;
         this.link_rfoto = link_rfoto;
+        this.estado_amistad = estado_amistad;
     }
 
     public int getId() {
@@ -76,5 +78,13 @@ public class Usuario {
 
     public void setLink_rfoto(String link_rfoto) {
         this.link_rfoto = link_rfoto;
+    }
+
+    public int getEstado_amistad() {
+        return estado_amistad;
+    }
+
+    public void setEstado_amistad(int estado_amistad) {
+        this.estado_amistad = estado_amistad;
     }
 }
