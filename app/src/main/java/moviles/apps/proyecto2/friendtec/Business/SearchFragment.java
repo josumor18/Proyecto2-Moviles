@@ -1,6 +1,7 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -103,6 +104,7 @@ public class SearchFragment extends Fragment {
             LoginActivity.actualizarAuth_Token(token, getActivity());
 
             JSONArray resultados = response.getJSONArray("resultados");
+            JSONArray estados_amistad = response.getJSONArray("estados_amistad");
             for(int i = 0; i < resultados.length(); i++){
                 JSONObject user_json = (JSONObject) resultados.get(i);
 
@@ -114,6 +116,7 @@ public class SearchFragment extends Fragment {
                 usuario.setCarrera(user_json.getString("carrera"));
                 usuario.setLink_foto(user_json.getString("foto"));
                 usuario.setLink_rfoto(user_json.getString("rfoto"));
+                usuario.setEstado_amistad((int) estados_amistad.get(i));
 
                 resultados_aux.add(usuario);
             }
@@ -145,14 +148,29 @@ public class SearchFragment extends Fragment {
             //Primero amigos
             Usuario_Singleton user = Usuario_Singleton.getInstance();
             ArrayList<Usuario> NoAmigos = new ArrayList<Usuario>();
+            ArrayList<Usuario> Amigos = new ArrayList<Usuario>();
+            ArrayList<Usuario> SoliEnv = new ArrayList<Usuario>();
+            ArrayList<Usuario> SoliRec = new ArrayList<Usuario>();
             for(Usuario usuario: resultados_aux){
-                if(user.esAmigo(usuario.getId())){
-                    resultados_busqueda.add(usuario);
-                }else{
-                    NoAmigos.add(usuario);
+                switch(usuario.getEstado_amistad()) {
+                    case 0:
+                        NoAmigos.add(usuario);
+                        break;
+                    case 1:
+                        Amigos.add(usuario);
+                        break;
+                    case 2:
+                        SoliEnv.add(usuario);
+                        break;
+                    case 3:
+                        SoliRec.add(usuario);
+                        break;
                 }
             }
 
+            resultados_busqueda.addAll(Amigos);
+            resultados_busqueda.addAll(SoliEnv);
+            resultados_busqueda.addAll(SoliRec);
             resultados_busqueda.addAll(NoAmigos);
         }else{
             resultados_busqueda = resultados_aux;
@@ -206,12 +224,73 @@ public class SearchFragment extends Fragment {
 
             txtUsername.setText(resultados_busqueda.get(i).getNombre());
 
-            if(Usuario_Singleton.getInstance().esAmigo(resultados_busqueda.get(i).getId())){
-                btnAddDelAmigo.setText(" Eliminar de mis amigos ");
-            }else{
-                btnAddDelAmigo.setText("  Agregar a mis amigos  ");
+            String button_text = "  Agregar a mis amigos  ";
+            switch(resultados_busqueda.get(i).getEstado_amistad()){
+                case 0:
+                    button_text = "  Agregar a mis amigos  ";
+                    break;
+                case 1:
+                    button_text = " Eliminar de mis amigos ";
+                    break;
+                case 2:
+                    button_text = "      Cancelar solicitud    ";
+                    break;
+                case 3:
+                    button_text = "   Responder solicitud    ";
+                    break;
             }
+
+            btnAddDelAmigo.setText(button_text);
+            btnAddDelAmigo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String button_text = "  Agregar a mis amigos  ";
+                    int opcion = resultados_busqueda.get(i).getEstado_amistad();
+
+                    ExecuteBuscarBoton executeBuscarBoton = new ExecuteBuscarBoton();
+                    int id_user = resultados_busqueda.get(i).getId();
+                    executeBuscarBoton.execute(Integer.toString(id_user), Integer.toString(opcion));
+
+                    switch(opcion){
+                        case 0:
+                            button_text = "      Cancelar solicitud    ";
+                            cambiarEstado(id_user, 2);
+                            break;
+                        case 1:
+                            button_text = "  Agregar a mis amigos  ";
+                            cambiarEstado(id_user, 0);
+                            Usuario_Singleton.getInstance().eliminarAmigo(id_user);
+                            break;
+                        case 2:
+                            button_text = "  Agregar a mis amigos  ";
+                            cambiarEstado(id_user, 0);
+                            break;
+                        case 3:
+                            button_text = "   Responder solicitud    ";
+                            Intent requestIntent = new Intent(getActivity().getApplicationContext(), RequestsActivity.class);
+                            startActivity(requestIntent);
+                            break;
+                    }
+                    btnAddDelAmigo.setText(button_text);
+                }
+            });
+
             return view;
+        }
+    }
+
+    private void cambiarEstado(int id_user, int nuevo_estado){
+        for(Usuario usuario: resultados_busqueda){
+            if(usuario.getId() == id_user){
+                usuario.setEstado_amistad(nuevo_estado);
+                break;
+            }
+        }
+        for (Usuario usuario: resultados_aux){
+            if(usuario.getId() == id_user){
+                usuario.setEstado_amistad(nuevo_estado);
+                break;
+            }
         }
     }
 
@@ -248,6 +327,20 @@ public class SearchFragment extends Fragment {
                 Toast.makeText(getActivity(), mensaje, Toast.LENGTH_SHORT).show();
             }
             //rlLoaderEmisoras.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteBuscarBoton extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            api.search_button_action(user.getId(), strings[0], strings[1]);
+
+            return null;
         }
     }
 }
