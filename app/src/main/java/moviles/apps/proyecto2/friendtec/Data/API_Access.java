@@ -52,7 +52,7 @@ public class API_Access {
         Parametros.put("auth_token", token);
         return makePOSTRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
-
+    //VERIFICAR NOMBRES CORRECTOS EN EL BACKEND
     public boolean register(String carne, String carrera, String email, String username, String password){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
@@ -64,6 +64,26 @@ public class API_Access {
         Parametros.put("password_confirmation",password);
         return makePOSTRequest("users/register", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
 
+    }
+    //VERIFICAR NOMBRES CORRECTOS EN EL BACKEND
+    public boolean change_user(String id ,String name, String email,String authToken){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("name",name);
+        Parametros.put("email",email);
+        Parametros.put("authentication_token",authToken);
+        return makePOSTRequest("users/change_user", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+    //VERIFICAR NOMBRES CORRECTOS EN EL BACKEND
+    public boolean change_pass(String id ,String password, String new_password,String authToken){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("password", password);
+        Parametros.put("new_password", new_password);
+        Parametros.put("authentication_token",authToken);
+        return makePOSTRequest("users/change_pass", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
     public boolean getAmigos(String idUser){
