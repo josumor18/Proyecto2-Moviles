@@ -187,6 +187,12 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.contenedor, startFragment);
                 fragmentTransaction.commit();
                 break;
+            case 1:
+                SearchFragment searchFragment = new SearchFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.contenedor, searchFragment);
+                fragmentTransaction.commit();
+                break;
         }
         //fragmentTransaction.commit();
     }
