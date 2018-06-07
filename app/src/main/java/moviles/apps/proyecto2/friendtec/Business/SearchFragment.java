@@ -67,11 +67,15 @@ public class SearchFragment extends Fragment {
 
         lvResultadosBusqueda = v.findViewById(R.id.lvResultadosBusqueda);
         spSortOptions = v.findViewById(R.id.spSortOptions);
-        spSortOptions.setSelection(-1);
+        spSortOptions.setSelection(0);
         spSortOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorSpinnerOption));
+
+                ordenarResultados(position);
+
+                lvResultadosBusqueda.setAdapter(new ResultsAdapter());
             }
 
             @Override
@@ -116,10 +120,44 @@ public class SearchFragment extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
-        resultados_busqueda = resultados_aux;
 
-        //lvResultadosBusqueda.removeAllViews();
+        ordenarResultados(spSortOptions.getSelectedItemPosition());
+
         lvResultadosBusqueda.setAdapter(new ResultsAdapter());
+    }
+
+    private void ordenarResultados(int opcion){
+        resultados_busqueda = new ArrayList<Usuario>();
+        if(opcion == 1){
+            //Orden alfabético
+            for(Usuario usuario: resultados_aux){
+                int i = 0;
+                for(i = 0; i < resultados_busqueda.size(); i++){
+                    String nomUs = usuario.getNombre();
+                    String nomBus = resultados_busqueda.get(i).getNombre();
+                    if(nomUs.compareTo(nomBus) < 0){
+                        break;
+                    }
+                }
+                resultados_busqueda.add(i, usuario);
+            }
+        }else if(opcion == 2){
+            //Primero amigos
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            ArrayList<Usuario> NoAmigos = new ArrayList<Usuario>();
+            for(Usuario usuario: resultados_aux){
+                if(user.esAmigo(usuario.getId())){
+                    resultados_busqueda.add(usuario);
+                }else{
+                    NoAmigos.add(usuario);
+                }
+            }
+
+            resultados_busqueda.addAll(NoAmigos);
+        }else{
+            resultados_busqueda = resultados_aux;
+        }
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
