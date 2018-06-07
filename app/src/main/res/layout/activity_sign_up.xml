@@ -17,7 +17,7 @@
             android:id="@+id/txt_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:text="TextView"
             android:textAlignment="center"
             android:textSize="30sp"
@@ -29,12 +29,20 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:gravity="center"
             android:hint="carné estudiantil"
             android:inputType="number" />
 
+
+        <Spinner
+            android:id="@+id/sp_carrera"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center" />
 
         <EditText
             android:id="@+id/edt_email"
