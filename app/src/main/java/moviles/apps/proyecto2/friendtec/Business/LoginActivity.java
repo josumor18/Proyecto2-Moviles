@@ -25,6 +25,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
 import com.cloudinary.utils.ObjectUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -150,9 +151,13 @@ public class LoginActivity extends AppCompatActivity {
             guardarUsuarioSesion(user.getEmail(), user.getAuth_token());
         }
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        ExecuteGetAmigos executeGetAmigos = new ExecuteGetAmigos();
+        executeGetAmigos.execute();
+
+        //En el metodo cargarAmigos es donde Hace el cambio de Activity (Intent)
+        /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
-        finish();
+        finish();*/
     }
 
     public void signinClicked(View view){
@@ -191,15 +196,6 @@ public class LoginActivity extends AppCompatActivity {
         user.setFoto_rounded(
                 null);
 
-        //Streaming.pause();
-        //Streaming.cleanStreaming();
-
-        /*LoginManager.getInstance().logOut();
-        if(perfil != null){
-            perfil.stopTracking();
-            perfil = null;
-        }
-        email = "";*/
         SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
 
         preferences.edit().putString(PREFERENCE_CARNET, "").apply();
@@ -306,49 +302,73 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-   /* public class HttpGetBitmap extends AsyncTask<String, Void, Bitmap> {
-        private static final String REQUEST_METHOD = "GET";
-        private static final int READ_TIMEOUT = 15000;
-        private static final int CONNECTION_TIMEOUT = 15000;
+    public void cargarAmigos(JSONObject response) {
+        Usuario_Singleton user = Usuario_Singleton.getInstance();
+        try {
+            JSONArray jsonAmigos = response.getJSONArray("amigos");
+            for(int i = 0; i < jsonAmigos.length(); i++){
+                JSONObject amigo_i = (JSONObject) jsonAmigos.get(i);
+
+                Usuario amigo = new Usuario();
+                amigo.setId(amigo_i.getInt("id"));
+                amigo.setNombre(amigo_i.getString("nombre"));
+                amigo.setCarnet(amigo_i.getString("carnet"));
+                amigo.setEmail(amigo_i.getString("email"));
+                amigo.setCarrera(amigo_i.getString("carrera"));
+                amigo.setLink_foto(amigo_i.getString("foto"));
+                amigo.setLink_rfoto(amigo_i.getString("rfoto"));
+
+                user.addAmigo(amigo);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteGetAmigos extends AsyncTask<String, Void, String> {
+        private boolean isOk = false;
 
         @Override
-        protected Bitmap doInBackground(String... strings){
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-            Bitmap cover;
-
-            String address = strings[0];//Usuario_Singleton.getInstance().getUrl_foto();
-            //String addressr = Usuario_Singleton.getInstance().getUrl_foto_rounded();
-
-            try {
-
-                //Create a URL object holding our url
-                URL myUrl = new URL(address);
-
-                //Create a connection
-                HttpURLConnection connection =(HttpURLConnection)
-                        myUrl.openConnection();
-
-                //Set methods and timeouts
-                connection.setRequestMethod(REQUEST_METHOD);
-                connection.setReadTimeout(READ_TIMEOUT);
-                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-
-                //Connect to our url
-                connection.setDoInput(true);
-                connection.connect();
-
-                //Create a new InputStream
-                InputStream input = connection.getInputStream();
-                cover = BitmapFactory.decodeStream(input);
-
-            }
-            catch(IOException e){
-                e.printStackTrace();
-                cover = null;
-            }
-            return cover;
+            //rlLoader.setVisibility(View.VISIBLE);
+            //rlLogin.setVisibility(View.INVISIBLE);
         }
-    }*/
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            API_Access api = API_Access.getInstance();
+            isOk = api.getAmigos(Usuario_Singleton.getInstance().getId());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                cargarAmigos(API_Access.getInstance().getJsonObjectResponse());
+            }else{
+                String mensaje = "Error al iniciar sesión";
+                try {
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+                //rlLoader.setVisibility(View.INVISIBLE);
+                //rlLogin.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
 }

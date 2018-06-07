@@ -2,6 +2,8 @@ package moviles.apps.proyecto2.friendtec.Business;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 public class Usuario_Singleton {
     private static final Usuario_Singleton ourInstance = new Usuario_Singleton();
 
@@ -15,6 +17,7 @@ public class Usuario_Singleton {
     private Bitmap foto;
     private Bitmap foto_rounded;
     private String auth_token;
+    private ArrayList<Usuario> listaAmigos = new ArrayList<Usuario>();
 
     public static Usuario_Singleton getInstance() {
         return ourInstance;
@@ -101,5 +104,26 @@ public class Usuario_Singleton {
 
     public void setCarrera(String carrera) {
         this.carrera = carrera;
+    }
+
+    public ArrayList<Usuario> getListaAmigos() {
+        return listaAmigos;
+    }
+
+    public void setListaAmigos(ArrayList<Usuario> listaAmigos) {
+        this.listaAmigos = listaAmigos;
+    }
+
+    public void addAmigo(Usuario amigo){
+        this.listaAmigos.add(amigo);
+    }
+
+    public boolean esAmigo (int id_user){
+        for(Usuario amigo: listaAmigos){
+            if(amigo.getId() == id_user){
+                return true;
+            }
+        }
+        return false;
     }
 }

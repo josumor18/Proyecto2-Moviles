@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="search_sort_option">
+        <item>---------</item>
+        <item>Nombre de usuario</item>
+        <item>Amigos primero</item>
+    </string-array>
+</resources>
