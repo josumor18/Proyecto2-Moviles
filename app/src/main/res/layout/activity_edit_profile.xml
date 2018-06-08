@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:onClick="guardarCambiosClicked"
             android:text="Guardar" />
 
     </LinearLayout>
@@ -141,6 +142,7 @@
             android:layout_alignEnd="@+id/PerfilContrasenaLinearLayout"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/PerfilContrasenaLinearLayout"
+            android:onClick="cambiarContrasenaClicked"
             android:text="Cambiar contraseña" />
 
     </LinearLayout>

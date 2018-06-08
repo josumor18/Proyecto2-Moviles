@@ -86,6 +86,17 @@ public class API_Access {
         return makePOSTRequest("users/change_pass", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean new_post(String idUser, String contenido, String urlImage){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("idUser",idUser);
+        Parametros.put("contenido",contenido);
+        Parametros.put("urlImage", urlImage);
+
+        return makePOSTRequest("posts/new", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
+
     public boolean getAmigos(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "amigos/get_amigos?id=" + idUser;
