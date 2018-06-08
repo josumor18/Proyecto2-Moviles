@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -197,8 +198,8 @@ public class LoginActivity extends AppCompatActivity {
         user.setUrl_foto_rounded("");
         user.setAuth_token("");
         user.setFoto(null);
-        user.setFoto_rounded(
-                null);
+        user.setFoto_rounded(null);
+        user.setListaAmigos(new ArrayList<Usuario>());
 
         SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
 

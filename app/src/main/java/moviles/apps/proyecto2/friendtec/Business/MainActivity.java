@@ -175,16 +175,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-
+            Intent perfilIntent = new Intent(this, ProfileActivity.class);
+            startActivity(perfilIntent);
         } else if (id == R.id.nav_amigos) {
-
+            Intent amigosIntent = new Intent(this, FirendListActivity.class);
+            startActivity(amigosIntent);
         } else if (id == R.id.nav_mapa) {
             Intent mapsIntent = new Intent(this, MapsActivity.class);
             startActivity(mapsIntent);
         } else if (id == R.id.nav_requests) {
-
+            Intent requestsIntent = new Intent(this, RequestsActivity.class);
+            startActivity(requestsIntent);
         } else if (id == R.id.nav_logout) {
-
+            LoginActivity.cerrarSesion(getApplicationContext());
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
