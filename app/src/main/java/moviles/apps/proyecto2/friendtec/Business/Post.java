@@ -24,7 +24,7 @@ public class Post extends Object{
         String timeIn = fecha_hora.split("T")[1];//.split(".")[0];
         timeIn = timeIn.split("\\.")[0];
         String fechaHora = dateIn + " " + timeIn;
-        DateFormat format = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         Date date = new Date();
         try{
             date = format.parse(fechaHora);
@@ -80,5 +80,10 @@ public class Post extends Object{
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
+    }
+
+    public String getFechaHoraString(){
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH);
+        return format.format(fecha_hora);
     }
 }

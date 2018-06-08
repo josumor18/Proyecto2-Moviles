@@ -119,6 +119,19 @@ public class API_Access {
         return makePOSTRequest("users/search_button", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getNotifications(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "notifications/get?id=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean setFalseNotifications(String idUser){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", idUser);
+        return makePOSTRequest("notifications/set_false", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);

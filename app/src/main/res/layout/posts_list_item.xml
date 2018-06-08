@@ -58,8 +58,18 @@
                     android:id="@+id/imgImagePost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
+                    android:paddingRight="10dp"
                     app:srcCompat="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/txtFechaHora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingEnd="10dp"
+                    android:text="dd/mm/yyyy HH:mm"
+                    android:textAlignment="textEnd"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -69,7 +79,7 @@
             android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="8sp" />
+            android:textSize="4sp" />
     </LinearLayout>
 
 
