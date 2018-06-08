@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -32,18 +33,27 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+
+import moviles.apps.proyecto2.friendtec.Data.API_Access;
 import moviles.apps.proyecto2.friendtec.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentTransaction fragmentTransaction;
+    Runnable runnable;
+    final Handler handler  = new Handler();
+
+    public static ArrayList<Notificacion> notificaciones = new ArrayList<Notificacion>();
 
     private String[] toolbarTitle = {"Inicio", "Buscar", "Mensajes", "Notificaciones"};
-    private int[] tabUnselectedIcon = {R.drawable.ic_round_home_24px, R.drawable.ic_round_search_24px, R.drawable.ic_round_email_24px, R.drawable.ic_round_notifications_active_24px};
-    private  int[] tabSelectedIcon = {R.drawable.ic_round_home_24px_sel, R.drawable.ic_round_search_24px_sel, R.drawable.ic_round_email_24px_sel, R.drawable.ic_round_notifications_active_24px_sel};
+    private int[] tabUnselectedIcon = {R.drawable.ic_round_home_24px, R.drawable.ic_round_search_24px, R.drawable.ic_outline_email_24px, R.drawable.ic_round_notifications_24px};
+    private  int[] tabSelectedIcon = {R.drawable.ic_round_home_24px_sel, R.drawable.ic_round_search_24px_sel, R.drawable.ic_outline_email_24px_sel, R.drawable.ic_round_notifications_24px_sel};
     Toolbar toolbar;
     TabLayout tabLayout;
     ImageView imgUserPhoto;
@@ -113,6 +123,17 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.contenedor, startFragment);
         fragmentTransaction.commit();
+
+        runnable = new Runnable() {
+            public void run() {
+                ExecuteGetNotifications not = new ExecuteGetNotifications();
+                not.execute();
+
+                handler.postDelayed(this, 10000);
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);
     }
 
     @Override
@@ -153,9 +174,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_inicio) {
-            // Handle the camera action
-        } else if (id == R.id.nav_perfil) {
+        if (id == R.id.nav_perfil) {
 
         } else if (id == R.id.nav_amigos) {
 
@@ -193,8 +212,13 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.contenedor, searchFragment);
                 fragmentTransaction.commit();
                 break;
+            case 3:
+                NotificationsFragment notificationsFragment = new NotificationsFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.contenedor, notificationsFragment);
+                fragmentTransaction.commit();
+                break;
         }
-        //fragmentTransaction.commit();
     }
 
     private void cambiarIconoSeleccionado(int position){
@@ -204,5 +228,52 @@ public class MainActivity extends AppCompatActivity
 
     private void cambiarIconoDeseleccionado(int position){
         tabLayout.getTabAt(position).setIcon(tabUnselectedIcon[position]);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteGetNotifications extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.getNotifications(user.getId());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                try {
+                    notificaciones.clear();
+                    JSONObject jsonObject = API_Access.getInstance().getJsonObjectResponse();
+                    JSONArray notifications = jsonObject.getJSONArray("notificaciones");
+
+                    for (int i = 0; i < notifications.length(); i++){
+                        JSONObject notificacion = (JSONObject) notifications.get(i);
+                        Notificacion nueva = new Notificacion(notificacion.getInt("id_friend"), notificacion.getInt("id_post"), notificacion.getBoolean("visto"));
+                        notificaciones.add(nueva);
+                        if (!(nueva.isVisto())){
+                            if(tabLayout.getSelectedTabPosition() != 3){
+                                tabLayout.getTabAt(3).setIcon(R.drawable.ic_round_notifications_active_24px);
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

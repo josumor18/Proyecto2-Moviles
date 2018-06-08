@@ -5,4 +5,5 @@
     <color name="colorAccent">#ef3e35</color>
 
     <color name="colorSpinnerOption">#5e7f9c</color>
+    <color name="colorBackgroundNewNotification">#517ea0be</color>
 </resources>

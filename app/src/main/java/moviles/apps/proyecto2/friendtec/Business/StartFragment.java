@@ -114,8 +114,8 @@ public class StartFragment extends Fragment {
     private void addPostToList(Post nuevo){
         int cont = 0;
         for(cont = 0; cont < posts.size(); cont++){
-            if(posts.get(cont).getFecha_hora().after(nuevo.getFecha_hora())){
-                continue;
+            if(posts.get(cont).getFecha_hora().before(nuevo.getFecha_hora())){
+                break;
             }
         }
         posts.add(cont, nuevo);
@@ -155,6 +155,7 @@ public class StartFragment extends Fragment {
             TextView txtUsername = view.findViewById(R.id.txtUsernamePost);
             TextView txtPost = view.findViewById(R.id.txtPost);
             ImageView imgImagePost = view.findViewById(R.id.imgImagePost);
+            TextView txtFechaHora = view.findViewById(R.id.txtFechaHora);
 
             HttpGetBitmap request = new HttpGetBitmap();
             Bitmap userImage = null;
@@ -180,6 +181,9 @@ public class StartFragment extends Fragment {
                 e.printStackTrace();
             }
             imgImagePost.setImageBitmap(postImage);
+
+            txtFechaHora.setText(posts.get(i).getFechaHoraString());
+
             return view;
         }
     }
