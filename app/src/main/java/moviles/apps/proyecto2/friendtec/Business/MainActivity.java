@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_amigos) {
 
         } else if (id == R.id.nav_mapa) {
-
+            Intent mapsIntent = new Intent(this, MapsActivity.class);
+            startActivity(mapsIntent);
         } else if (id == R.id.nav_requests) {
 
         } else if (id == R.id.nav_logout) {
