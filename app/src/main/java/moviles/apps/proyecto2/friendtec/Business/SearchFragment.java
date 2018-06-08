@@ -3,6 +3,8 @@ package moviles.apps.proyecto2.friendtec.Business;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -204,7 +207,7 @@ public class SearchFragment extends Fragment {
                 view = inflater.inflate(R.layout.search_listview_item, null);
             }
 
-            ImageView imgUsuario = view.findViewById(R.id.img_UserRequest);
+            ImageView imgUsuario = view.findViewById(R.id.imgSearchUser);
             TextView txtUsername = view.findViewById(R.id.txtUsernamSearch);
             Button btnAddDelAmigo = view.findViewById(R.id.btnAddDelAmigo);
 
