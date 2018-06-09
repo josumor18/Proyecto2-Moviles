@@ -161,12 +161,8 @@ public class LoginActivity extends AppCompatActivity {
         finish();*/
     }
 
-    public void signinClicked(View view){
-        //Aqui llama a la activity de registrar
-        //Intent intent = new Intent(getApplicationContext(), RegistrarActivity.class);
-        //startActivity(intent);
-    }
-    public void clickRegistrate(View view){
+
+    public void registerClicked(View view){
         Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent);
     }

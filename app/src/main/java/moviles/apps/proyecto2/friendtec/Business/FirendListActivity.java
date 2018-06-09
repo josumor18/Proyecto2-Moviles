@@ -105,16 +105,16 @@ public class FirendListActivity extends AppCompatActivity {
             TextView txtUsername = view.findViewById(R.id.txtUserList);
 
 
-            /*HttpGetBitmap request = new HttpGetBitmap();
+            HttpGetBitmap request = new HttpGetBitmap();
             Bitmap userImage = null;
             try {
-                userImage = request.execute(user.getListaAmigos().get(i).getLink_foto_user()).get();
+                userImage = request.execute(user.getListaAmigos().get(i).getLink_foto()).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            imgUsuario.setImageBitmap(userImage);*/
+            imgUsuario.setImageBitmap(userImage);
 
             txtUsername.setText(user.getListaAmigos().get(i).getNombre());
 

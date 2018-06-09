@@ -30,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     ArrayList<EditText> campos_obligatorios;
 
-    private static String[] listCarreras = {"Ing.Computacion","Ing.Electria","Administracion de Empresas", "Ing.Ambiental",
+    private static String[] listCarreras = {"Ing.Computacion","Ing.Electrica","Administracion de Empresas", "Ing.Ambiental",
         "Ing.Civil", "Ing.Computadores"};
 
     String carreraSelected = "";
@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                 //Change the selected item's text color
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
                 carreraSelected = listCarreras[sp_carrera.getSelectedItemPosition()];
-                Toast.makeText(getApplicationContext(), carreraSelected, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, carreraSelected, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -127,11 +127,11 @@ public class SignUpActivity extends AppCompatActivity {
         private String carne;
         private String email;
         private String password;
-        private boolean isRegistered = false;
+        private boolean isRegistered;
 
         public ExecuteRegister(String carne, String carrera, String email,String name, String password){
             this.carne = carne;
-            this.email = carrera;
+            this.carrera = carrera;
             this.name = name;
             this.email = email;
             this.password = password;
@@ -142,7 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
             API_Access api = API_Access.getInstance();
-            //isRegistered = api.register(carne,carrera,email,name,password);
+            isRegistered = api.register(carne,carrera,email,name,password);
 
 
 

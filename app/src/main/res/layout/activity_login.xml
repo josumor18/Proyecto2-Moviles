@@ -81,6 +81,8 @@
             android:id="@+id/txtRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="registerClicked"
             android:text="Regístrate aquí"
             android:textAlignment="center"
             android:textColor="#0066ff" />
