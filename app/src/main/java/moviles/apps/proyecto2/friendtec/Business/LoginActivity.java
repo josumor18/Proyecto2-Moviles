@@ -135,6 +135,10 @@ public class LoginActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        if(coverImage == null){
+            coverImage = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                    R.drawable.user_foto);
+        }
         user.setFoto(coverImage);
 
         HttpGetBitmap request_r = new HttpGetBitmap();
@@ -145,6 +149,10 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+        if(coverImage_r == null){
+            coverImage_r = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                    R.drawable.user_rfoto);
         }
         user.setFoto_rounded(coverImage_r);
         //Si son correctas...hacer:
