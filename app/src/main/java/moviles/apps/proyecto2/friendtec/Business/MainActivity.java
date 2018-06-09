@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity
             if(isOk){
                 try {
                     notificaciones.clear();
-                    JSONObject jsonObject = API_Access.getInstance().getJsonObjectResponse();
+                    JSONObject jsonObject = API_Access.getInstance().getJsonObjectResponseNotifs();
                     JSONArray notifications = jsonObject.getJSONArray("notificaciones");
 
                     for (int i = 0; i < notifications.length(); i++){
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity
             super.onPostExecute(s);
 
             if(isOk){
-                cargarAmigos(API_Access.getInstance().getJsonObjectResponse());
+                cargarAmigos(API_Access.getInstance().getJsonObjectResponseAmigos());
             }else{
                 String mensaje = "Error al actualizar lista de amigos";
                 try {

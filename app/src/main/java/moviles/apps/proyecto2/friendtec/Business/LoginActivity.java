@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
     private static String foto = "";
 
     public static boolean isFacebook=false;
-    RelativeLayout rlLogin, rlLoader;
+    RelativeLayout rlLoading;
+    LinearLayout lLLogin;
     ProgressBar progressBarLogin;
     EditText edtCarnetLogin;
     EditText edtPasswordLogin;
@@ -72,7 +75,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        lLLogin = findViewById(R.id.lLLogin);
+        rlLoading = findViewById(R.id.rlLoading);
+
         if(getEstadoSesion()){
+            lLLogin.setVisibility(View.INVISIBLE);
+            rlLoading.setVisibility(View.VISIBLE);
+
             String[] userData = getUsuarioSesion();
             carnet = userData[0];
             token = userData[1];
@@ -374,8 +383,8 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-                //rlLoader.setVisibility(View.INVISIBLE);
-                //rlLogin.setVisibility(View.VISIBLE);
+                rlLoading.setVisibility(View.INVISIBLE);
+                lLLogin.setVisibility(View.VISIBLE);
             }
         }
     }
