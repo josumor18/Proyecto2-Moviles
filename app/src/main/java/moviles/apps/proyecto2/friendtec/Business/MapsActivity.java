@@ -190,14 +190,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if(isOk){
                 cargarLocations(API_Access.getInstance().getJsonObjectResponse());
-            }else{
-                String mensaje = "Error al obtener ubicaciones de amigos";
-                try {
-                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(MapsActivity.this, mensaje, Toast.LENGTH_SHORT).show();
             }
         }
     }
