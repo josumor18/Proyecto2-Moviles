@@ -2,12 +2,14 @@ package moviles.apps.proyecto2.friendtec.Business;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +25,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+
+import moviles.apps.proyecto2.friendtec.Data.API_Access;
+import moviles.apps.proyecto2.friendtec.Data.HttpGetBitmap;
 import moviles.apps.proyecto2.friendtec.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -95,6 +105,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         getMyLocation(true);
+
+        ExecuteGetFriendsLocations executeGetFriendsLocations = new ExecuteGetFriendsLocations();
+        executeGetFriendsLocations.execute();
     }
 
     private void getMyLocation(boolean init){
@@ -116,6 +129,75 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (init){
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(7));
+            }
+        }
+    }
+
+    public void cargarLocations(JSONObject response) {
+        Usuario_Singleton user = Usuario_Singleton.getInstance();
+        try {
+            JSONArray jsonLocations= response.getJSONArray("locations");
+            for(int i = 0; i < jsonLocations.length(); i++){
+                JSONObject location = (JSONObject) jsonLocations.get(i);
+
+                int id_amigo = location.getInt("id_user");
+                double latitud = location.getDouble("latitud");
+                double longitud = location.getDouble("longitud");
+
+                Usuario amigo = Usuario_Singleton.getInstance().getAmigo(id_amigo);
+                LatLng user_location = new LatLng(latitud, longitud);
+
+                HttpGetBitmap request = new HttpGetBitmap();
+                Bitmap userImage = null;
+                try {
+                    userImage = request.execute(amigo.getLink_rfoto()).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                if(userImage != null){
+                    Bitmap resizedBitmap = Bitmap.createScaledBitmap(userImage, 80, 80, false);
+
+                    mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)).position(user_location).title(amigo.getNombre()));
+                }else{
+                    mMap.addMarker(new MarkerOptions().position(user_location).title(amigo.getNombre()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteGetFriendsLocations extends AsyncTask<String, Void, String> {
+        private boolean isOk = false;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            API_Access api = API_Access.getInstance();
+            isOk = api.getFriendsLocations(Usuario_Singleton.getInstance().getId());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                cargarLocations(API_Access.getInstance().getJsonObjectResponse());
+            }else{
+                String mensaje = "Error al obtener ubicaciones de amigos";
+                try {
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(MapsActivity.this, mensaje, Toast.LENGTH_SHORT).show();
             }
         }
     }
