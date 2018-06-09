@@ -110,6 +110,12 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
+    public boolean getPostsProfile(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "posts/get_posts?id=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
+    }
+
     public boolean getInfoUser(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "users/get_username_foto?id_user=" + idUser;
