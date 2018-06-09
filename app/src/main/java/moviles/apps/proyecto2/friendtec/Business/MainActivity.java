@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-            Intent perfilIntent = new Intent(this, ProfileActivity.class);
+            Intent perfilIntent = new Intent(this, EditProfileActivity.class);
             startActivity(perfilIntent);
         } else if (id == R.id.nav_amigos) {
             Intent amigosIntent = new Intent(this, FirendListActivity.class);

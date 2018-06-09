@@ -54,7 +54,7 @@ public class API_Access {
         Parametros.put("auth_token", token);
         return makePOSTRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
-    //VERIFICAR NOMBRES CORRECTOS EN EL BACKEND
+
     public boolean register(String carne, String carrera, String email, String username, String password){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
@@ -87,14 +87,14 @@ public class API_Access {
         return makePOSTRequest("users/change_pass", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
-    public boolean new_post(String idUser, String contenido, String urlImage){
+    public boolean new_post(String idUser, String contenido, String urlImage, String fecha){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
-        Parametros.put("idUser",idUser);
+        Parametros.put("id",idUser);
         Parametros.put("contenido",contenido);
-        Parametros.put("urlImage", urlImage);
-
-        return makePOSTRequest("posts/new", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+        Parametros.put("foto", urlImage);
+        Parametros.put("fecha_hora", fecha);
+        return makePOSTRequest("posts/create", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
 
     }
 
