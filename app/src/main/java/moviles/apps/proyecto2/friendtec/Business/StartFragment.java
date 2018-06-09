@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ public class StartFragment extends Fragment {
     private ArrayList<Post> posts = new ArrayList<Post>();
     private HashMap<Integer, String> nombresUsuario = new HashMap<Integer, String>();
     private HashMap<Integer, String> fotosUsuario = new HashMap<Integer, String>();
+
+    RelativeLayout rlLoader, rlStart;
     ListView lvPosts;
     FloatingActionButton ftbtnCratePost;
 
@@ -50,6 +53,10 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_start, container, false);
+        rlLoader = v.findViewById(R.id.rlLoaderStart);
+        rlStart = v.findViewById(R.id.rlStart);
+        rlLoader.setVisibility(View.VISIBLE);
+        rlStart.setVisibility(View.INVISIBLE);
 
         nombresUsuario.clear();
         lvPosts = v.findViewById(R.id.lvPosts);
@@ -102,6 +109,10 @@ public class StartFragment extends Fragment {
                     infoUser = nombre_usuario + "%" + fotosUsuario.get(post.getInt("id_user"));
                 }
                 String[] user_info = infoUser.split("%");
+                if(user_info.length != 2){
+                    String nom = user_info[0];
+                    user_info = new String[]{nom, ""};
+                }
                 //posts.add(new Post(post.getInt("id_user"), user_info[0], user_info[1], post.getString("contenido"), post.getString("foto"), post.getString("fecha_hora")));
                 addPostToList(new Post(post.getInt("id_user"), user_info[0], user_info[1], post.getString("contenido"), post.getString("foto"), post.getString("fecha_hora")));
             }
@@ -110,6 +121,9 @@ public class StartFragment extends Fragment {
         }
 
         lvPosts.setAdapter(new PostsAdapter());
+
+        rlStart.setVisibility(View.VISIBLE);
+        rlLoader.setVisibility(View.INVISIBLE);
     }
 
     private void addPostToList(Post nuevo){

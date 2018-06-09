@@ -25,6 +25,8 @@ public class API_Access {
     private final String url_base = "https://friendtec.herokuapp.com/api/";
     int estadoRequest = -1;
     private JSONObject jsonObjectResponse = new JSONObject();
+    private JSONObject jsonObjectResponseNotifs = new JSONObject();
+    private JSONObject jsonObjectResponseAmigos = new JSONObject();
     private JSONArray jsonArrayResponse = new JSONArray();
 
     private static final API_Access ourInstance = new API_Access();
@@ -99,25 +101,25 @@ public class API_Access {
     public boolean getAmigos(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "amigos/get_amigos?id=" + idUser;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 2);
     }
 
     public boolean getPosts(String idUser, String auth_token){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "posts/get_friend_posts?id=" + idUser + "&auth_token=" + auth_token;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
     public boolean getInfoUser(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "users/get_username_foto?id_user=" + idUser;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
     public boolean search(String idUser, String auth_token, String busqueda){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "users/search?id=" + idUser + "&auth_token=" + auth_token + "&busqueda=" + busqueda;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
     public boolean search_button_action(String idUser, String id_user2, String accion){
@@ -132,7 +134,7 @@ public class API_Access {
     public boolean getNotifications(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "notifications/get?id=" + idUser;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 1);
     }
 
     public boolean setFalseNotifications(String idUser){
@@ -145,7 +147,7 @@ public class API_Access {
     public boolean getFriendsLocations(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "locations/get_friends_locations?id=" + idUser;
-        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
     public boolean postLocation(String idUser, String latitud, String longitud){
@@ -161,6 +163,18 @@ public class API_Access {
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
         return jsonObjectResponse;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
+    public JSONObject getJsonObjectResponseNotifs(){
+        Log.d("estado: ", ""+estadoRequest);
+        return jsonObjectResponseNotifs;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
+    public JSONObject getJsonObjectResponseAmigos(){
+        Log.d("estado: ", ""+estadoRequest);
+        return jsonObjectResponseAmigos;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -252,7 +266,8 @@ public class API_Access {
     }
 
     // Solicitud para GETs
-    private boolean makeGETRequest(String urlEsp, String metodo, int responseCode) {
+    //devolver_en= 0:JsonObjectResponse; 1:JsonObjectResponseNotifs; 2:JsonObjectResponseAmigos
+    private boolean makeGETRequest(String urlEsp, String metodo, int responseCode, int devolver_en) {
         String result = "";
         URL url;
         HttpsURLConnection httpsURLConnection;
@@ -294,7 +309,18 @@ public class API_Access {
             reader.close();
             streamReader.close();
 
-            jsonObjectResponse = new JSONObject(result);
+            switch(devolver_en){
+                case 0:
+                    jsonObjectResponse = new JSONObject(result);
+                    break;
+                case 1:
+                    jsonObjectResponseNotifs = new JSONObject(result);
+                    break;
+                case 2:
+                    jsonObjectResponseAmigos = new JSONObject(result);
+                    break;
+            }
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
