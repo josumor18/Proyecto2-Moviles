@@ -135,4 +135,13 @@ public class Usuario_Singleton {
             }
         }
     }
+
+    public Usuario getAmigo(int id){
+        for (Usuario amigo: listaAmigos){
+            if(id == amigo.getId()){
+                return amigo;
+            }
+        }
+        return new Usuario();
+    }
 }

@@ -1,12 +1,18 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -32,8 +39,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -44,6 +55,11 @@ import moviles.apps.proyecto2.friendtec.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Double longitud;
+    private Double latitud;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     FragmentTransaction fragmentTransaction;
     Runnable runnable;
@@ -129,11 +145,42 @@ public class MainActivity extends AppCompatActivity
                 ExecuteGetNotifications not = new ExecuteGetNotifications();
                 not.execute();
 
+                ExecuteGetAmigos executeGetAmigos = new ExecuteGetAmigos();
+                executeGetAmigos.execute();
+
+
                 handler.postDelayed(this, 10000);
             }
         };
 
         handler.postDelayed(runnable, 1000);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        if(obtenerUbicacion()){
+            ExecuteSetLocation executeSetLocation = new ExecuteSetLocation();
+            executeSetLocation.execute();
+        }
     }
 
     @Override
@@ -281,6 +328,117 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void cargarAmigos(JSONObject response) {
+        Usuario_Singleton user = Usuario_Singleton.getInstance();
+        try {
+            JSONArray jsonAmigos = response.getJSONArray("amigos");
+            for(int i = 0; i < jsonAmigos.length(); i++){
+                JSONObject amigo_i = (JSONObject) jsonAmigos.get(i);
+
+                Usuario amigo = new Usuario();
+                amigo.setId(amigo_i.getInt("id"));
+                amigo.setNombre(amigo_i.getString("nombre"));
+                amigo.setCarnet(amigo_i.getString("carnet"));
+                amigo.setEmail(amigo_i.getString("email"));
+                amigo.setCarrera(amigo_i.getString("carrera"));
+                amigo.setLink_foto(amigo_i.getString("foto"));
+                amigo.setLink_rfoto(amigo_i.getString("rfoto"));
+
+                user.addAmigo(amigo);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteGetAmigos extends AsyncTask<String, Void, String> {
+        private boolean isOk = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //rlLoader.setVisibility(View.VISIBLE);
+            //rlLogin.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            API_Access api = API_Access.getInstance();
+            isOk = api.getAmigos(Usuario_Singleton.getInstance().getId());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                cargarAmigos(API_Access.getInstance().getJsonObjectResponse());
+            }else{
+                String mensaje = "Error al actualizar lista de amigos";
+                try {
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+                //rlLoader.setVisibility(View.INVISIBLE);
+                //rlLogin.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private boolean obtenerUbicacion(){
+        try{
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
+            }
+            else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+                Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                if(lastLocation == null){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+                    lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+
+                LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                longitud = lastLocation.getLongitude();
+                latitud = lastLocation.getLatitude();
+                if(location != null){
+                    return true;
+                }
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "ERROR UBICACION", Toast.LENGTH_SHORT);
+        return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteSetLocation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            // Obtiene ubicación
+            if (latitud != null && longitud != null){
+                API_Access api = API_Access.getInstance();
+                api.postLocation(Usuario_Singleton.getInstance().getId(), Double.toString(latitud), Double.toString(longitud));
+            }
+            return null;
         }
     }
 }

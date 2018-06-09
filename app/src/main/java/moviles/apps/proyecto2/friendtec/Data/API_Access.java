@@ -143,6 +143,21 @@ public class API_Access {
         return makePOSTRequest("notifications/set_false", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getFriendsLocations(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "locations/get_friends_locations?id=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean postLocation(String idUser, String latitud, String longitud){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", idUser);
+        Parametros.put("latitud", latitud);
+        Parametros.put("longitud", longitud);
+        return makePOSTRequest("locations/create", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);

@@ -335,7 +335,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     public class ExecuteGetAmigos extends AsyncTask<String, Void, String> {
         private boolean isOk = false;
 
@@ -363,7 +363,7 @@ public class LoginActivity extends AppCompatActivity {
             if(isOk){
                 cargarAmigos(API_Access.getInstance().getJsonObjectResponse());
             }else{
-                String mensaje = "Error al iniciar sesión";
+                String mensaje = "Error al obtener amigos";
                 try {
                     mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
                 } catch (JSONException e) {
