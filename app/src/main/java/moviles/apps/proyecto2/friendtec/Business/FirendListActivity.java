@@ -1,5 +1,6 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -47,7 +48,11 @@ public class FirendListActivity extends AppCompatActivity {
         lvAmigos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Aqui se envia al perfil con el idUser
+                Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
+                int idUser_enviar = user.getListaAmigos().get(position).getId();
+                //Toast.makeText(FirendListActivity.this,user.getListaAmigos().get(position).getNombre(),Toast.LENGTH_LONG ).show();
+                intent.putExtra("idUser",idUser_enviar);
+                startActivity(intent);
             }
         });
         List<Usuario> x = user.getListaAmigos();
