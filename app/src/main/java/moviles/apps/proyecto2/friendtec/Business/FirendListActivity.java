@@ -1,6 +1,7 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -113,6 +114,10 @@ public class FirendListActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
+            }
+            if(userImage == null){
+                userImage = BitmapFactory.decodeResource( getApplicationContext().getResources(),
+                        R.drawable.user_foto);
             }
             imgUsuario.setImageBitmap(userImage);
 

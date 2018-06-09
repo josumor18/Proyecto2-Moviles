@@ -3,6 +3,7 @@ package moviles.apps.proyecto2.friendtec.Business;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -165,6 +166,10 @@ public class StartFragment extends Fragment {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
+            }
+            if(userImage == null){
+                userImage = BitmapFactory.decodeResource( getActivity().getApplicationContext().getResources(),
+                        R.drawable.user_rfoto);
             }
             imgUsuario.setImageBitmap(userImage);
 

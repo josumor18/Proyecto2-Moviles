@@ -3,6 +3,7 @@ package moviles.apps.proyecto2.friendtec.Business;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
@@ -212,13 +213,18 @@ public class SearchFragment extends Fragment {
             Button btnAddDelAmigo = view.findViewById(R.id.btnAddDelAmigo);
 
             HttpGetBitmap request = new HttpGetBitmap();
-            Bitmap userImage = null;
+            Bitmap userImage = BitmapFactory.decodeResource( getActivity().getApplicationContext().getResources(),
+                    R.drawable.user_foto);
             try {
                 userImage = request.execute(resultados_busqueda.get(i).getLink_foto()).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
+            }
+            if(userImage == null){
+                userImage = BitmapFactory.decodeResource( getActivity().getApplicationContext().getResources(),
+                        R.drawable.user_foto);
             }
             imgUsuario.setImageBitmap(userImage);
 
