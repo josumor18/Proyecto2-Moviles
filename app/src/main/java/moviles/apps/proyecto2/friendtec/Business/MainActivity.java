@@ -334,6 +334,7 @@ public class MainActivity extends AppCompatActivity
     public void cargarAmigos(JSONObject response) {
         Usuario_Singleton user = Usuario_Singleton.getInstance();
         try {
+            user.setListaAmigos(new ArrayList<Usuario>());
             JSONArray jsonAmigos = response.getJSONArray("amigos");
             for(int i = 0; i < jsonAmigos.length(); i++){
                 JSONObject amigo_i = (JSONObject) jsonAmigos.get(i);
