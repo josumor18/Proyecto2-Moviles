@@ -143,9 +143,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 try {
                     token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
                     Usuario_Singleton.getInstance().setAuth_token(token);
-                    LoginActivity.actualizarAuth_Token(token, getApplicationContext());
+                    //LoginActivity.actualizarAuth_Token(token, getApplicationContext());
                     //Si es Activity
-                    //LoginActivity.actualizarAuth_Token(token, this);
+                    LoginActivity.actualizarAuth_Token(token, EditProfileActivity.this);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
