@@ -30,13 +30,15 @@
             super.onPostExecute(s);
         }
     }
+
+	//Enviar al backend y usuario_singleton f1,f2
 	
 	// PARA OBTENER LA URL DE UNA IMAGEN:
 	// Rounded:
-	cloudinary.url().transformation(new Transformation()
+	String f = cloudinary.url().transformation(new Transformation()
 	.height(200).radius(180).crop("scale").chain()
-	.angle(0)).imageTag(identificador + ".png");
+	.angle(0)).imageTag(identificador + ".png"); //Random
 	// Normal:
-	cloudinary.url().transformation(new Transformation()
+	String f2 = cloudinary.url().transformation(new Transformation()
 	.height(200).radius(0).crop("scale").chain()
 	.angle(0)).imageTag(identificador + ".png");

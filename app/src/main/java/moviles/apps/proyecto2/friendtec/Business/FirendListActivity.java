@@ -39,8 +39,8 @@ public class FirendListActivity extends AppCompatActivity {
 
         user = Usuario_Singleton.getInstance();
 
-        ExecuteGetFriends getFriends = new ExecuteGetFriends(user.getId());
-        getFriends.execute();
+        /*ExecuteGetFriends getFriends = new ExecuteGetFriends(user.getId());
+        getFriends.execute();*/
 
 
         lvAmigos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -49,9 +49,12 @@ public class FirendListActivity extends AppCompatActivity {
                 //Aqui se envia al perfil con el idUser
             }
         });
+        List<Usuario> x = user.getListaAmigos();
+
+        lvAmigos.setAdapter(new AmigosAdapter());
     }
 
-    private void cargarAmigos(JSONObject jsonResult){
+    /*private void cargarAmigos(JSONObject jsonResult){
         try {
             user.getListaAmigos().clear();
 
@@ -67,8 +70,8 @@ public class FirendListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //ordenarProgramacion();
-        lvAmigos.setAdapter(new AmigosAdapter());
-    }
+        //lvAmigos.setAdapter(new AmigosAdapter());
+    }*/
 
     public class AmigosAdapter extends BaseAdapter {
 
@@ -119,7 +122,7 @@ public class FirendListActivity extends AppCompatActivity {
         }
     }
 
-    public class ExecuteGetFriends extends AsyncTask<String, Void, String> {
+    /*public class ExecuteGetFriends extends AsyncTask<String, Void, String> {
         boolean isOk = false;
         String idUser;
 
@@ -162,7 +165,7 @@ public class FirendListActivity extends AppCompatActivity {
 
 
         }
-    }
+    }*/
 
 
 }
