@@ -35,7 +35,11 @@
         <activity android:name=".Business.SignUpActivity" />
         <activity android:name=".Business.ProfileActivity" />
         <activity android:name=".Business.EditProfileActivity" />
-        <activity android:name=".Business.ChatActivity" />
+        <activity android:name=".Business.ChatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
         <activity android:name=".Business.NewPostActivity" />
         <activity android:name=".Business.FirendListActivity" />
         <!--

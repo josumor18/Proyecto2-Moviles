@@ -52,7 +52,7 @@
                     android:layout_weight="1"
                     android:singleLine="false"
                     android:text="Post"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+                    android:textColor="@color/common_google_signin_btn_text_light_pressed" />
 
                 <ImageView
                     android:id="@+id/imgImagePost"

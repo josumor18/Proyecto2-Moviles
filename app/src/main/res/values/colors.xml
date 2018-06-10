@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#083358</color>
     <color name="colorAccent">#ef3e35</color>
 
-    <color name="colorSpinnerOption">#5e7f9c</color>
+    <color name="colorSpinnerOption">#479e9e9e</color>
     <color name="colorBackgroundNewNotification">#517ea0be</color>
+    <color name="colorTransparent">#00ffffff</color>
 </resources>

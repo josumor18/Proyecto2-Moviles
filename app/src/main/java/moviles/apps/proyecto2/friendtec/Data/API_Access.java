@@ -27,6 +27,7 @@ public class API_Access {
     private JSONObject jsonObjectResponse = new JSONObject();
     private JSONObject jsonObjectResponseNotifs = new JSONObject();
     private JSONObject jsonObjectResponseAmigos = new JSONObject();
+    private JSONObject jsonObjectResponseChats = new JSONObject();
     private JSONArray jsonArrayResponse = new JSONArray();
 
     private static final API_Access ourInstance = new API_Access();
@@ -165,6 +166,25 @@ public class API_Access {
         return makePOSTRequest("locations/create", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getChats(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "chats/get?id=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 3);
+    }
+
+    public boolean setTrueChat(String idChat){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_chat", idChat);
+        return makePOSTRequest("chats/set_true", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getChatMessages(String idChat){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "chats/get_chat_messages?id_chat=" + idChat;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
@@ -181,6 +201,12 @@ public class API_Access {
     public JSONObject getJsonObjectResponseAmigos(){
         Log.d("estado: ", ""+estadoRequest);
         return jsonObjectResponseAmigos;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
+    public JSONObject getJsonObjectResponseChats(){
+        Log.d("estado: ", ""+estadoRequest);
+        return jsonObjectResponseChats;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -324,6 +350,9 @@ public class API_Access {
                     break;
                 case 2:
                     jsonObjectResponseAmigos = new JSONObject(result);
+                    break;
+                case 3:
+                    jsonObjectResponseChats = new JSONObject(result);
                     break;
             }
 

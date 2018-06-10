@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     final Handler handler  = new Handler();
 
     public static ArrayList<Notificacion> notificaciones = new ArrayList<Notificacion>();
+    public static ArrayList<Chat> lista_chats = new ArrayList<Chat>();
 
     private String[] toolbarTitle = {"Inicio", "Buscar", "Mensajes", "Notificaciones"};
     private int[] tabUnselectedIcon = {R.drawable.ic_round_home_24px, R.drawable.ic_round_search_24px, R.drawable.ic_outline_email_24px, R.drawable.ic_round_notifications_24px};
@@ -144,6 +145,9 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 ExecuteGetNotifications not = new ExecuteGetNotifications();
                 not.execute();
+
+                ExecuteGetChats executeGetChats = new ExecuteGetChats();
+                executeGetChats.execute();
 
                 ExecuteGetAmigos executeGetAmigos = new ExecuteGetAmigos();
                 executeGetAmigos.execute();
@@ -264,6 +268,12 @@ public class MainActivity extends AppCompatActivity
                 SearchFragment searchFragment = new SearchFragment();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.contenedor, searchFragment);
+                fragmentTransaction.commit();
+                break;
+            case 2:
+                ChatListFragment chatListFragment = new ChatListFragment();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.contenedor, chatListFragment);
                 fragmentTransaction.commit();
                 break;
             case 3:
@@ -393,6 +403,52 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(MainActivity.this, mensaje, Toast.LENGTH_SHORT).show();
                 //rlLoader.setVisibility(View.INVISIBLE);
                 //rlLogin.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteGetChats extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.getChats(user.getId());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                try {
+                    lista_chats.clear();
+                    JSONObject jsonObject = API_Access.getInstance().getJsonObjectResponseChats();
+                    JSONArray chats = jsonObject.getJSONArray("chats");
+
+                    for (int i = 0; i < chats.length(); i++){
+                        JSONObject chat = (JSONObject) chats.get(i);
+                        Chat nuevo = new Chat(chat.getInt("id_friend"), chat.getInt("id"), chat.getBoolean("visto"), chat.getString("last_message"));
+                        lista_chats.add(nuevo);
+                        if (!(nuevo.isVisto())){
+                            if(tabLayout.getSelectedTabPosition() != 2){
+                                tabLayout.getTabAt(2).setIcon(R.drawable.ic_round_email_24px);
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -314,8 +314,8 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-                //rlLoader.setVisibility(View.INVISIBLE);
-                //rlLogin.setVisibility(View.VISIBLE);
+                rlLoading.setVisibility(View.INVISIBLE);
+                lLLogin.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -383,8 +383,7 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-                rlLoading.setVisibility(View.INVISIBLE);
-                lLLogin.setVisibility(View.VISIBLE);
+
             }
         }
     }
