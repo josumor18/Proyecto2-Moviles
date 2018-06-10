@@ -185,6 +185,16 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
+    public boolean sendMessage(String id, String id_friend, String id_chat, String message){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("id_friend", id_friend);
+        Parametros.put("id_chat", id_chat);
+        Parametros.put("message", message);
+        return makePOSTRequest("chats/send_message", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
