@@ -62,8 +62,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:background="@color/colorPrimaryDark"
             android:onClick="guardarCambiosClicked"
-            android:text="Guardar" />
+            android:text="Guardar"
+            android:textColor="@android:color/background_light" />
 
     </LinearLayout>
 
@@ -140,6 +142,7 @@
             android:layout_alignEnd="@+id/PerfilContrasenaLinearLayout"
             android:layout_alignParentBottom="true"
             android:layout_alignStart="@+id/PerfilContrasenaLinearLayout"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
             android:onClick="cambiarContrasenaClicked"
             android:text="Cambiar contraseña" />
 
