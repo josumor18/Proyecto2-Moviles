@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import moviles.apps.proyecto2.friendtec.R;
 
 public class FirendListActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     ListView lvAmigos;
     Usuario_Singleton user;
 
@@ -37,12 +39,15 @@ public class FirendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firend_list);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Lista de Amigos");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         lvAmigos = findViewById(R.id.lv_amigos);
 
         user = Usuario_Singleton.getInstance();
-
-        /*ExecuteGetFriends getFriends = new ExecuteGetFriends(user.getId());
-        getFriends.execute();*/
 
 
         lvAmigos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,24 +65,6 @@ public class FirendListActivity extends AppCompatActivity {
         lvAmigos.setAdapter(new AmigosAdapter());
     }
 
-    /*private void cargarAmigos(JSONObject jsonResult){
-        try {
-            user.getListaAmigos().clear();
-
-            JSONArray jsonAmigos = jsonResult.getJSONArray("lista_amigos");
-            //for(int i = 0; i < jsonTendencias.length(); i++) {
-            for(int i = 0; i < jsonAmigos.length(); i++) {
-
-                    JSONObject u = (JSONObject) jsonAmigos.get(i);
-                    user.getListaAmigos().add(new Usuario(u.getInt("id"),"","","","","","",0));
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //ordenarProgramacion();
-        //lvAmigos.setAdapter(new AmigosAdapter());
-    }*/
 
     public class AmigosAdapter extends BaseAdapter {
 
