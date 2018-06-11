@@ -77,8 +77,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="10dp"
+                        android:background="@color/colorPrimary"
                         android:onClick="guardarCambiosClicked"
-                        android:text="Guardar" />
+                        android:text="Guardar"
+                        android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
                 </LinearLayout>
 
