@@ -104,7 +104,6 @@ public class ChatActivity extends AppCompatActivity {
             public void run() {
                 if(shutdown){
                     finish();
-                    //Thread.currentThread().interrupt();
                 }else{
                     ExecuteGetMessages executeGetMessages1 = new ExecuteGetMessages();
                     executeGetMessages1.execute();
