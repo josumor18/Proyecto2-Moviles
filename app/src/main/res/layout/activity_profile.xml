@@ -11,44 +11,67 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <include layout="@layout/app_bar_main" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgView_perfil"
-                android:layout_width="80dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txt_nombre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="Nombre"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txt_carrera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:gravity="center_horizontal"
-                android:text="Carrera" />
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imgView_perfil"
+                        android:layout_width="80dp"
+                        android:layout_height="90dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="20dp"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
 
-        <ListView
-            android:id="@+id/lv_postsPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="25dp" />
+                    <TextView
+                        android:id="@+id/txt_nombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Nombre"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_carrera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="Carrera" />
+
+                    <Button
+                        android:id="@+id/btnOpenChat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:onClick="openChatClicked"
+                        android:text="Enviar mensaje"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/lv_postsPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

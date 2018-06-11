@@ -95,8 +95,8 @@ public class ChatActivity extends AppCompatActivity {
 
         lvMensajesChat = findViewById(R.id.lvMensajesChat);
 
-        ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
-        executeGetMessages.execute();
+        //ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
+        //executeGetMessages.execute();
 
         txtMessage = findViewById(R.id.txtMessage);
 
@@ -105,8 +105,11 @@ public class ChatActivity extends AppCompatActivity {
                 if(shutdown){
                     finish();
                 }else{
-                    ExecuteGetMessages executeGetMessages1 = new ExecuteGetMessages();
-                    executeGetMessages1.execute();
+                    if(id_chat != 0){
+                        ExecuteGetMessages executeGetMessages1 = new ExecuteGetMessages();
+                        executeGetMessages1.execute();
+                    }
+
                 }
 
 
@@ -229,6 +232,7 @@ public class ChatActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             API_Access api = API_Access.getInstance();
             Usuario_Singleton user = Usuario_Singleton.getInstance();
+
             isOk = api.getChatMessages(Integer.toString(id_chat));
 
             return null;
@@ -285,10 +289,20 @@ public class ChatActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if(isOk){
-                ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
-                executeGetMessages.execute();
+                API_Access api = API_Access.getInstance();
+                JSONObject response = api.getJsonObjectResponse();
+                try {
+                    if(id_chat == 0){
+                        id_chat = response.getInt("id_chat");
+                    }
 
-                txtMessage.setText("");
+                    ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
+                    executeGetMessages.execute();
+
+                    txtMessage.setText("");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }else{
                 String mensaje = "Error al enviar mensaje";
 

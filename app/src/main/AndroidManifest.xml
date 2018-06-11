@@ -33,15 +33,31 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" />
         <activity android:name=".Business.SignUpActivity" />
-        <activity android:name=".Business.ProfileActivity" />
-        <activity android:name=".Business.EditProfileActivity" />
+        <activity android:name=".Business.ProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.FirendListActivity" />
+        </activity>
+        <activity android:name=".Business.EditProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
         <activity android:name=".Business.ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Business.MainActivity" />
         </activity>
-        <activity android:name=".Business.NewPostActivity" />
-        <activity android:name=".Business.FirendListActivity" />
+        <activity android:name=".Business.NewPostActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
+        <activity android:name=".Business.FirendListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -56,8 +72,16 @@
 
         <activity
             android:name=".Business.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".Business.RequestsActivity"></activity>
+            android:label="@string/title_activity_maps">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
+        <activity android:name=".Business.RequestsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Business.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

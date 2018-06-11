@@ -1,10 +1,12 @@
 package moviles.apps.proyecto2.friendtec.Business;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ArrayList<Post> posts = new ArrayList<Post>();
 
+    Toolbar toolbar;
+
     int idUser;
     Usuario usuario_perfil;
     Usuario_Singleton user;
@@ -37,10 +41,30 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView imageView;
     ListView lvPosts;
 
+    public void openChatClicked(View v){
+        int id_chat = 0;
+        for(Chat chat: MainActivity.lista_chats){
+            if(idUser == chat.getId_friend()){
+                id_chat = chat.getId_chat();
+                break;
+            }
+        }
+        Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+        chatIntent.putExtra("id_chat", id_chat);
+        chatIntent.putExtra("id_friend", idUser);
+        startActivity(chatIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Perfil de Usuario");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         user = Usuario_Singleton.getInstance();
         txtNombre = findViewById(R.id.txt_nombre);

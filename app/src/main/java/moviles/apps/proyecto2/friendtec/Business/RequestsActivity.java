@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import moviles.apps.proyecto2.friendtec.R;
 
 public class RequestsActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     ListView lv_requests;
     ImageView imguser;
     TextView txt_name;
@@ -43,6 +45,12 @@ public class RequestsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Solicitudes de amistad");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         lv_requests = findViewById(R.id.lv_requests);
         user = Usuario_Singleton.getInstance();

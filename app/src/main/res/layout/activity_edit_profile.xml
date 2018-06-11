@@ -7,142 +7,166 @@
     android:orientation="vertical"
     tools:context=".Business.EditProfileActivity">
 
-    <ImageButton
-        android:id="@+id/img_Perfil"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/PerfilLinearLayout"
-        android:layout_marginTop="13dp"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
-
     <LinearLayout
-        android:id="@+id/PerfilLinearLayout"
-        android:layout_width="220dp"
-        android:layout_height="200dp"
-
-        android:layout_marginLeft="170dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/PerfilNombreTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nombre"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/edt_nombre"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/PerfilCorreoTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Correo electronico"
-            android:textSize="16sp" />
-
-
-        <EditText
-            android:id="@+id/edt_correo"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btn_guardar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:onClick="guardarCambiosClicked"
-            android:text="Guardar" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/PerfilContrasenaLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:layout_below="@+id/PerfilLinearLayout"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/TextView"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="center_horizontal"
-            android:text="Camibar Contraseña:"
-            android:textAllCaps="true"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <include layout="@layout/app_bar_main" />
 
-        <TextView
-            android:id="@+id/PerfilContrasenaTextView"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Contraseña Actual"
-            android:textSize="16sp" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/edt_contrasena"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:textSize="13sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/PerfilNuevaContrasenaTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nueva Contraseña"
-            android:textSize="16sp" />
+                <ImageButton
+                    android:id="@+id/img_Perfil"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/PerfilLinearLayout"
+                    android:layout_marginTop="13dp"
+                    app:srcCompat="@android:drawable/ic_menu_camera" />
 
-        <EditText
-            android:id="@+id/edt_nuevaCon"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:textSize="13sp" />
+                <LinearLayout
+                    android:id="@+id/PerfilLinearLayout"
+                    android:layout_width="220dp"
+                    android:layout_height="200dp"
 
-        <TextView
-            android:id="@+id/PerfilConfirmConTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirmar Contraseña"
-            android:textSize="16sp" />
+                    android:layout_marginLeft="170dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edt_nuevaConfCon"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:textSize="13sp" />
+                    <TextView
+                        android:id="@+id/PerfilNombreTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre"
+                        android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/btn_cambiarCon"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignEnd="@+id/PerfilContrasenaLinearLayout"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/PerfilContrasenaLinearLayout"
-            android:onClick="cambiarContrasenaClicked"
-            android:text="Cambiar contraseña" />
+                    <EditText
+                        android:id="@+id/edt_nombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/PerfilCorreoTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Correo electronico"
+                        android:textSize="16sp" />
+
+
+                    <EditText
+                        android:id="@+id/edt_correo"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/btn_guardar"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:onClick="guardarCambiosClicked"
+                        android:text="Guardar" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/PerfilContrasenaLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:layout_below="@+id/PerfilLinearLayout"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="center_horizontal"
+                        android:text="Camibar Contraseña:"
+                        android:textAllCaps="true"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/PerfilContrasenaTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Contraseña Actual"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_contrasena"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/PerfilNuevaContrasenaTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nueva Contraseña"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_nuevaCon"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/PerfilConfirmConTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Confirmar Contraseña"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_nuevaConfCon"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/btn_cambiarCon"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignEnd="@+id/PerfilContrasenaLinearLayout"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignStart="@+id/PerfilContrasenaLinearLayout"
+                        android:onClick="cambiarContrasenaClicked"
+                        android:text="Cambiar contraseña" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+
 
     </LinearLayout>
+
 
 </RelativeLayout>
