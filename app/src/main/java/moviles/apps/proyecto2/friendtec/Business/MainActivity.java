@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
                 executeGetAmigos.execute();
 
 
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
             }
         };
 

@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,8 +40,16 @@ public class ChatActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     private int id_chat;
+    private int id_friend;
     Bitmap userImage;
     ListView lvMensajesChat;
+    TextView txtMessage;
+    Button btnSendMessage;
+    private boolean shutdown = false;
+    private boolean nuevos = false;
+
+    Runnable runnable;
+    final Handler handler  = new Handler();
 
     private ArrayList<Mensaje> lista_mensajes = new ArrayList<Mensaje>();
 
@@ -52,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
 
         id_chat = getIntent().getIntExtra("id_chat", 0);
         // Ir a pedir los chats
-        int id_friend = getIntent().getIntExtra("id_friend", 0);
+        id_friend = getIntent().getIntExtra("id_friend", 0);
         Usuario amigo = Usuario_Singleton.getInstance().getAmigo(id_friend);
 
         HttpGetBitmap request = new HttpGetBitmap();
@@ -87,35 +97,66 @@ public class ChatActivity extends AppCompatActivity {
 
         ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
         executeGetMessages.execute();
+
+        txtMessage = findViewById(R.id.txtMessage);
+
+        runnable = new Runnable() {
+            public void run() {
+                if(shutdown){
+                    finish();
+                    //Thread.currentThread().interrupt();
+                }else{
+                    ExecuteGetMessages executeGetMessages1 = new ExecuteGetMessages();
+                    executeGetMessages1.execute();
+                }
+
+
+                handler.postDelayed(this, 5000);
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
+        shutdown = true;
         return true;
     }
 
+    public void send_message(View v){
+        String mensaje = txtMessage.getText().toString();
+        if(!(mensaje.isEmpty())){
+            ExecuteSendMessage executeSendMessage = new ExecuteSendMessage();
+            executeSendMessage.execute(mensaje);
+        }
+    }
+
     public void cargarMensajes(JSONObject response) {
-        lista_mensajes = new ArrayList<Mensaje>();
         Usuario_Singleton user = Usuario_Singleton.getInstance();
         try {
             JSONArray jsonMessages = response.getJSONArray("mensajes");
-            for(int i = 0; i < jsonMessages.length(); i++){
-                JSONObject jsonMensaje = (JSONObject) jsonMessages.get(i);
+            if(jsonMessages.length() > lista_mensajes.size()){
+                nuevos = true;
+                lista_mensajes = new ArrayList<Mensaje>();
+                for(int i = 0; i < jsonMessages.length(); i++){
+                    JSONObject jsonMensaje = (JSONObject) jsonMessages.get(i);
 
-                String texto = jsonMensaje.getString("message");
-                boolean enviado = jsonMensaje.getBoolean("enviado");
+                    String texto = jsonMensaje.getString("message");
+                    boolean enviado = jsonMensaje.getBoolean("enviado");
 
-                lista_mensajes.add(new Mensaje(texto, enviado));
+                    lista_mensajes.add(new Mensaje(texto, enviado));
+                }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        lvMensajesChat.setAdapter(new MessagesAdapter());
-
-        lvMensajesChat.smoothScrollToPosition(lvMensajesChat.getFirstVisiblePosition());
+        if(nuevos){
+            lvMensajesChat.setAdapter(new MessagesAdapter());
+            nuevos = false;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,6 +257,45 @@ public class ChatActivity extends AppCompatActivity {
         public Mensaje(String mensaje, boolean enviado) {
             this.mensaje = mensaje;
             this.enviado = enviado;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteSendMessage extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //rlLoaderEmisoras.setVisibility(View.VISIBLE);
+            //rlLogin.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            isOk = api.sendMessage(user.getId(), Integer.toString(id_friend), Integer.toString(id_chat), strings[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
+                ExecuteGetMessages executeGetMessages = new ExecuteGetMessages();
+                executeGetMessages.execute();
+
+                txtMessage.setText("");
+            }else{
+                String mensaje = "Error al enviar mensaje";
+
+                Toast.makeText(getApplicationContext(), mensaje, Toast.LENGTH_SHORT).show();
+            }
+            //rlLoaderEmisoras.setVisibility(View.INVISIBLE);
         }
     }
 }

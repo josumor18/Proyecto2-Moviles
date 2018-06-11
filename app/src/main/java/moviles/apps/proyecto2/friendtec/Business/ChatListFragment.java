@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ public class ChatListFragment extends Fragment {
 
     ListView lvChatList;
 
+    Runnable runnable;
+    final Handler handler  = new Handler();
+
     private ArrayList<Chat> chats = new ArrayList<Chat>();
 
     public ChatListFragment() {
@@ -45,11 +49,7 @@ public class ChatListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_chat_list, container, false);
         lvChatList = v.findViewById(R.id.lvChatList);
 
-        for(int i = MainActivity.lista_chats.size() -1 ; i >= 0; i--){
-            chats.add(MainActivity.lista_chats.get(i));
-        }
 
-        lvChatList.setAdapter(new ChatsAdapter());
 
         lvChatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -62,6 +62,22 @@ public class ChatListFragment extends Fragment {
                 view.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
             }
         });
+
+        runnable = new Runnable() {
+            public void run() {
+                chats = new ArrayList<Chat>();
+
+                for(int i = MainActivity.lista_chats.size() -1 ; i >= 0; i--){
+                    chats.add(MainActivity.lista_chats.get(i));
+                }
+
+                lvChatList.setAdapter(new ChatsAdapter());
+
+                handler.postDelayed(this, 5000);
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);
 
         return v;
     }
@@ -128,7 +144,6 @@ public class ChatListFragment extends Fragment {
 
             txtUsernameChat.setText(nombre);
             txtLastMessage.setText(chats.get(i).getLast_message());
-            //txtNotification.setText(Html.fromHtml("Tu amigo <b>" + nombre + "</b> ha realizado una nueva publicación."));
 
             return view;
         }
