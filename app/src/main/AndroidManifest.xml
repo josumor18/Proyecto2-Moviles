@@ -58,6 +58,9 @@
             android:name=".Business.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".Business.RequestsActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="adce5ace57bf084404f78eb56855a16a18128058" />
     </application>
 
 </manifest>
