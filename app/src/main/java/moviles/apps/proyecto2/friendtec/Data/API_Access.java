@@ -99,6 +99,21 @@ public class API_Access {
 
     }
 
+    public boolean accept_request(String id ,String id_user2,String authToken){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("id_user2",id_user2);
+        Parametros.put("auth_token",authToken);
+        return makePOSTRequest("solicituds/aceptar", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean reject_request(String id ,String id_user2,String authToken){
+        //jsonObjectResponse = new JSONObject();
+        String urlEsp = "solicituds/delete?id=" + id + "&id_user2=" + id_user2 + "&auth_token=" + authToken;
+        return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
+    }
+
     public boolean getAmigos(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "amigos/get_amigos?id=" + idUser;
@@ -114,6 +129,12 @@ public class API_Access {
     public boolean getPostsProfile(String idUser){
         jsonArrayResponse = new JSONArray();
         String urlEsp = "posts/get_posts?id=" + idUser;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
+    }
+
+    public boolean getRequests(String idUser){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "solicituds/get?id=" + idUser;
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK, 0);
     }
 
