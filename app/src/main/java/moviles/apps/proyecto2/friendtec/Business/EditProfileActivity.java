@@ -426,7 +426,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Cloudinary cloudinary = new Cloudinary("cloudinary://523642389612375:w_BVcUQ7VFZ8IQj-iE1-zbqv5iU@ddgkzz2gk");
             try {
                 String path = picturePath; //Aquí sería la ruta donde se haya seleccionado la imagen
-                File file = new File(Environment.getExternalStorageDirectory(), path);
+                File file = new File(picturePath);
                 ///////////////////////////////////////////////////////////
                 // Generar el random para identificador de la foto
                 StringBuilder sb = new StringBuilder(10);
