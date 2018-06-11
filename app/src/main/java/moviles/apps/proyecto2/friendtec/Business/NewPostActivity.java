@@ -87,6 +87,7 @@ public class NewPostActivity extends AppCompatActivity {
         txtNombre = findViewById(R.id.txt_nombre);
         btn_imagen = findViewById(R.id.imgbtn_imagen);
 
+        img_post = findViewById(R.id.img_post);
         txtNombre.setText(user.getNombre());
 
         btn_imagen.setOnClickListener(new View.OnClickListener() {
@@ -132,8 +133,8 @@ public class NewPostActivity extends AppCompatActivity {
                     picturePath = getPath(NewPostActivity.this,URI);
                     Toast.makeText(this, picturePath, Toast.LENGTH_LONG).show();
 
-                    /*ExecuteUploaded executeUploaded = new ExecuteUploaded();
-                    executeUploaded.execute();*/
+                    ExecuteUploaded executeUploaded = new ExecuteUploaded();
+                    executeUploaded.execute();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -354,13 +355,13 @@ public class NewPostActivity extends AppCompatActivity {
 
                 cloudinary.uploader().upload(file.getAbsoluteFile(), ObjectUtils.asMap("public_id", rand));//emptyMap());
 
-                photoR = cloudinary.url().transformation(new Transformation()
-                        .height(200).radius(360).crop("scale").chain()
-                        .angle(0)).imageTag(rand + ".png"); //Random
+                photoR = (cloudinary.url().transformation(new Transformation()
+                        .radius(360).crop("scale").chain()
+                        .angle(0)).imageTag(rand + ".png")).split("\'")[1]; //Random
                 // Normal:
-                photoN = cloudinary.url().transformation(new Transformation()
-                        .height(200).radius(0).crop("scale").chain()
-                        .angle(0)).imageTag(rand + ".png");
+                photoN = (cloudinary.url().transformation(new Transformation()
+                        .radius(0).crop("scale").chain()
+                        .angle(0)).imageTag(rand + ".png")).split("\'")[1];
 
 
 
