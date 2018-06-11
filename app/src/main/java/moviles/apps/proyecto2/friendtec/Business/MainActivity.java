@@ -77,6 +77,30 @@ public class MainActivity extends AppCompatActivity
     Bitmap bitmap = null;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        bitmap = Usuario_Singleton.getInstance().getFoto_rounded();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        Bitmap toolbar_bitmap = bitmap;
+
+        int toolbar_length = 1;
+        // Calculate ActionBar height
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        {
+            toolbar_length = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, toolbar_length - 30, toolbar_length - 30, true));
+        toolbar.setNavigationIcon(d);//Usuario_Singleton.getInstance().getFoto());
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

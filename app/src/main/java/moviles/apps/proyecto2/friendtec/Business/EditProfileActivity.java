@@ -119,6 +119,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
