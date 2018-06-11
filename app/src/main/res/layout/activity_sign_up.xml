@@ -98,8 +98,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="35dp"
+            android:background="@color/colorPrimaryDark"
             android:onClick="registerClicked"
             android:text="Registrar"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

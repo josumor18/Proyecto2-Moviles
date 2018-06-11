@@ -9,15 +9,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="8sp" />
-
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
             <ImageView
                 android:id="@+id/imgUserPost"
@@ -42,24 +37,8 @@
                     android:layout_weight="1"
                     android:text="Nombre de usuario"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtPost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:singleLine="false"
-                    android:text="Post"
-                    android:textColor="@color/common_google_signin_btn_text_light_pressed" />
-
-                <ImageView
-                    android:id="@+id/imgImagePost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
 
                 <TextView
                     android:id="@+id/txtFechaHora"
@@ -68,18 +47,30 @@
                     android:layout_weight="1"
                     android:paddingEnd="10dp"
                     android:text="dd/mm/yyyy HH:mm"
-                    android:textAlignment="textEnd"
                     android:textSize="12sp" />
-
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgUserPost"
+                android:layout_margin="10dp"
+                android:singleLine="false"
+                android:text="Post"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed" />
+
+            <ImageView
+                android:id="@+id/imgImagePost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtPost"
+                android:layout_margin="10dp"
+                android:paddingRight="10dp"
+                app:srcCompat="@mipmap/ic_launcher" />
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="4sp" />
     </LinearLayout>
 
 
