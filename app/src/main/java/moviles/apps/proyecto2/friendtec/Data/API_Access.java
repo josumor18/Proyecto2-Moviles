@@ -99,6 +99,14 @@ public class API_Access {
 
     }
 
+    public boolean change_image(String id ,String photoN,String photoR){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("f1",photoN);
+        Parametros.put("f2",photoR);
+        return makePOSTRequest("users/update_image", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
     public boolean accept_request(String id ,String id_user2,String authToken){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
