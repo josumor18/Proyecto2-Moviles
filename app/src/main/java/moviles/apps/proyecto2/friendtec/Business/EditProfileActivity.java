@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
 import org.json.JSONException;
@@ -36,8 +37,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.concurrent.ExecutionException;
 
 import moviles.apps.proyecto2.friendtec.Data.API_Access;
+import moviles.apps.proyecto2.friendtec.Data.HttpGetBitmap;
 import moviles.apps.proyecto2.friendtec.R;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -63,6 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
     Button btn_guardar;
     Button btn_cambiarCon;
 
+    Bitmap bitmap;
     Usuario_Singleton user;
 
     @Override
@@ -90,6 +94,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         edt_nombre.setText(user.getNombre());
         edt_correo.setText(user.getEmail());
+
+        btn_loadImage.setImageBitmap(user.getFoto());
 
         btn_loadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -125,7 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 Uri URI = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), URI);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), URI);
                     // Log.d(TAG, String.valueOf(bitmap));
 
                     btn_loadImage.setImageBitmap(bitmap);
@@ -429,8 +435,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public class ExecuteUploaded extends AsyncTask<String, Void, String> {
+        boolean isOk;
         @Override
         protected String doInBackground(String... strings) {
+
 
             Cloudinary cloudinary = new Cloudinary("cloudinary://523642389612375:w_BVcUQ7VFZ8IQj-iE1-zbqv5iU@ddgkzz2gk");
             try {
@@ -445,6 +453,39 @@ public class EditProfileActivity extends AppCompatActivity {
                 ///////////////////////////////////////////////////////////
 
                 cloudinary.uploader().upload(file.getAbsoluteFile(), ObjectUtils.asMap("public_id", rand));//emptyMap());
+
+                String photoR = (cloudinary.url().transformation(new Transformation()
+                        .radius(360).crop("scale").chain()
+                        .angle(0)).imageTag(rand + ".png")).split("\'")[1]; //Random
+                // Normal:
+                String photoN = (cloudinary.url().transformation(new Transformation()
+                        .radius(0).crop("scale").chain()
+                        .angle(0)).imageTag(rand + ".png")).split("\'")[1];
+
+
+                API_Access api = API_Access.getInstance();
+
+                if(api.change_image(user.getId(),photoN,photoR)){
+
+                    HttpGetBitmap request = new HttpGetBitmap();
+                    Bitmap userImage = null;
+                    try {
+                        userImage = request.execute(photoR).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    if(userImage == null){
+                        userImage = BitmapFactory.decodeResource( EditProfileActivity.this.getResources(),
+                                R.drawable.user_rfoto);
+                    }
+
+                    user.setFoto(bitmap);
+                    user.setFoto_rounded(userImage);
+                }
+
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
